@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Form() {
+export default function FormKata() {
   const [kata, setKata] = React.useState("");
   const [starts, setStarts] = React.useState("");
   const [submitted, setSubmitted] = React.useState(true);
@@ -20,10 +20,6 @@ export default function Form() {
       if (event.target.name === "ends") setEnds(event.target.value);
       if (event.target.name === "contains") setContains(event.target.value);
     }
-  };
-
-  const handleSubmit = () => {
-    console.log(kata, starts, ends, contains);
   };
 
   return (

@@ -2,7 +2,7 @@ import "./App.css";
 import Home from "./Pages/Home";
 import Result from "./Pages/Result";
 import Header from "./components/Header";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (

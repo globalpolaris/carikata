@@ -1,11 +1,9 @@
 import React from "react";
-import { list } from "postcss";
 
 const obj = require("../word.json");
 
 export default function Words() {
   const [wordList, setWordList] = React.useState(obj.words);
-  const [toDisplay, setToDisplay] = React.useState(100);
   const [activeIndex, setActiveIndex] = React.useState(-1);
   const alphabet = [
     "a",
@@ -65,7 +63,7 @@ export default function Words() {
         })}
       </div>
       <div className="grid grid-cols-3 justify-items-center my-5">
-        {wordList.slice(0, toDisplay).map((word) => {
+        {wordList.slice(0, 100).map((word) => {
           return <p key={word}>{word}</p>;
         })}
         {activeIndex === -1 ? (

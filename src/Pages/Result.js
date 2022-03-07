@@ -3,10 +3,7 @@ import { useLocation } from "react-router-dom";
 import MiniForm from "../components/MiniForm";
 import SearchWords from "../components/SearchWords";
 
-const obj = require("../word.json");
 export default function Result() {
-  const [wordList, setWordList] = React.useState(obj.words);
-
   const location = useLocation();
   const { kata, starts, ends, contains } = location.state;
   return (

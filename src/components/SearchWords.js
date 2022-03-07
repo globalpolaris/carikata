@@ -68,12 +68,6 @@ export default function SearchWords({ kata, starts, ends, contains }) {
     return newArr;
   };
 
-  const displayWordStartsEndsWith = (starts, ends, arr) => {
-    let newArr = arr.filter((word) => word.startsWith(starts.toLowerCase()));
-    newArr = newArr.filter((word) => word.endsWith(ends.toLowerCase()));
-    return newArr;
-  };
-
   return (
     <div>
       <div className="flex flex-row justify-center my-3 flex-wrap"></div>
