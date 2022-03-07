@@ -11,6 +11,7 @@ export default function Result() {
   const { kata, starts, ends, contains } = location.state;
   return (
     <div className="flex flex-col items-center">
+      <h1 className="text-xl my-5 font-bold">Hasil</h1>
       <div className="flex flex-col lg:flex-row justify-center">
         <MiniForm props={location.state} />
         <div className="min-w-full">
