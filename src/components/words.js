@@ -5,7 +5,7 @@ const obj = require("../word.json");
 
 export default function Words() {
   const [wordList, setWordList] = React.useState(obj.words);
-  const [toDisplay, setToDisplay] = React.useState(500);
+  const [toDisplay, setToDisplay] = React.useState(100);
   const [activeIndex, setActiveIndex] = React.useState(-1);
   const alphabet = [
     "a",
@@ -52,7 +52,11 @@ export default function Words() {
                 displayWordStartsWith(alphabet);
                 setActiveIndex(i);
               }}
-              className={i === activeIndex ? "text-red-800 font-bold p-1 m-1 underline underline-offset-4" : "p-1 m-1"}
+              className={
+                i === activeIndex
+                  ? "text-red-800 font-bold p-1 m-1 underline underline-offset-4"
+                  : "p-1 m-1"
+              }
               key={alphabet}
             >
               {alphabet}
@@ -64,6 +68,9 @@ export default function Words() {
         {wordList.slice(0, toDisplay).map((word) => {
           return <p key={word}>{word}</p>;
         })}
+        {activeIndex === -1 ? (
+          <em className="col-span-3 my-5">Menampilkan 100 kata pertama</em>
+        ) : null}
       </div>
     </div>
   );
