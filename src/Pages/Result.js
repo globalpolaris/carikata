@@ -9,7 +9,6 @@ export default function Result() {
 
   const location = useLocation();
   const { kata, starts, ends, contains } = location.state;
-  console.log(location.state);
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col lg:flex-row justify-center">

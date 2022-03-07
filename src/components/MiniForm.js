@@ -24,7 +24,6 @@ export default function MiniForm(props) {
       if (event.target.name === "contains") setContains(event.target.value);
     }
   };
-  console.log(data);
   return (
     <div className="flex flex-col m-8 p-5 justify-start border max-h-fit rounded-md">
       <label className="px-1">Kata:</label>

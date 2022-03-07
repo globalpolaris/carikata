@@ -8,6 +8,8 @@ export default function SearchWords({ kata, starts, ends, contains }) {
   useEffect(() => {
     if (starts !== "" && kata === "" && ends === "" && contains === "")
       setWordList(displayWordStartsWith(starts, obj.words));
+    else if (starts === "" && kata !== "" && ends === "" && contains === "")
+      setWordList(displayWordsKata(kata, obj.words));
     else if (starts === "" && kata === "" && ends !== "" && contains === "")
       setWordList(displayWordEndsWith(ends, obj.words));
     else if (starts === "" && kata === "" && ends === "" && contains !== "")
@@ -16,26 +18,50 @@ export default function SearchWords({ kata, starts, ends, contains }) {
       let newArr = displayWordStartsWith(starts, obj.words);
       newArr = displayWordEndsWith(ends, newArr);
       setWordList(displayWordContains(contains, newArr));
-    } else if (starts !== "" && kata === "" && ends !== "" && contains === "")
-      setWordList(displayWordStartsEndsWith(starts, ends, obj.words));
-    else if (starts === "" && kata === "" && ends !== "" && contains !== "") {
+    } else if (starts === "" && kata === "" && ends !== "" && contains !== "") {
       let newArr = displayWordEndsWith(ends, obj.words);
       setWordList(displayWordContains(contains, newArr));
+    } else if (starts !== "" && kata !== "" && ends !== "" && contains !== "") {
+      let newArr = displayWordsKata(kata, obj.words);
+      newArr = displayWordStartsWith(starts, newArr);
+      newArr = displayWordEndsWith(ends, newArr);
+      newArr = displayWordContains(contains, newArr);
+      setWordList(newArr);
+    } else if (starts !== "" && kata !== "" && ends !== "" && contains === "") {
+      let newArr = displayWordsKata(kata, obj.words);
+      newArr = displayWordStartsWith(starts, newArr);
+      newArr = displayWordEndsWith(ends, newArr);
+      setWordList(newArr);
+    } else {
+      let newArr = displayWordsKata(kata, obj.words);
+      setWordList(newArr);
     }
   }, [starts, kata, ends, contains]);
 
+  const displayWordsKata = (kata, arr) => {
+    const chars = Array.from(kata.toLowerCase());
+    for (let i = 0; i < chars.length; i++) {
+      if (chars[i] === "?") chars[i] = "[a-z]";
+    }
+
+    const re = new RegExp(chars.join(""), "gi");
+    let newArr = arr.filter((word) => word.match(re));
+    console.log(newArr);
+    return newArr;
+  };
+
   const displayWordStartsWith = (letter, arr) => {
-    let newArr = arr.filter((word) => word.startsWith(letter));
+    let newArr = arr.filter((word) => word.startsWith(letter.toLowerCase()));
     return newArr;
   };
 
   const displayWordEndsWith = (letter, arr) => {
-    let newArr = arr.filter((word) => word.endsWith(letter));
+    let newArr = arr.filter((word) => word.endsWith(letter.toLowerCase()));
     return newArr;
   };
 
   const displayWordContains = (pattern, arr) => {
-    let chars = Array.from(pattern);
+    let chars = Array.from(pattern.toLowerCase());
     let regex = new RegExp(chars.join(""), "gi");
     console.log(regex);
     let newArr = arr.filter((word) => word.match(regex));
@@ -44,8 +70,8 @@ export default function SearchWords({ kata, starts, ends, contains }) {
   };
 
   const displayWordStartsEndsWith = (starts, ends, arr) => {
-    let newArr = arr.filter((word) => word.startsWith(starts));
-    newArr = newArr.filter((word) => word.endsWith(ends));
+    let newArr = arr.filter((word) => word.startsWith(starts.toLowerCase()));
+    newArr = newArr.filter((word) => word.endsWith(ends.toLowerCase()));
     return newArr;
   };
 
