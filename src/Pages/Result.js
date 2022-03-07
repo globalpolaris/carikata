@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import MiniForm from "../components/MiniForm";
 import SearchWords from "../components/SearchWords";
