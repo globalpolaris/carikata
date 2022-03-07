@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 export default function SearchWords({ kata, starts, ends, contains }) {
   const obj = require("../word.json");
   const [wordList, setWordList] = React.useState([]);
-  const [toDisplay, setToDisplay] = React.useState(500);
 
   useEffect(() => {
     if (starts !== "" && kata === "" && ends === "" && contains === "")
@@ -46,7 +45,7 @@ export default function SearchWords({ kata, starts, ends, contains }) {
 
     const re = new RegExp(chars.join(""), "gi");
     let newArr = arr.filter((word) => word.match(re));
-    console.log(newArr);
+    // console.log(newArr);
     return newArr;
   };
 
@@ -63,9 +62,9 @@ export default function SearchWords({ kata, starts, ends, contains }) {
   const displayWordContains = (pattern, arr) => {
     let chars = Array.from(pattern.toLowerCase());
     let regex = new RegExp(chars.join(""), "gi");
-    console.log(regex);
+    // console.log(regex);
     let newArr = arr.filter((word) => word.match(regex));
-    console.log(newArr);
+    // console.log(newArr);
     return newArr;
   };
 
