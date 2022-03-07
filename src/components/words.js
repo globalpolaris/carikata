@@ -52,7 +52,7 @@ export default function Words() {
                 displayWordStartsWith(alphabet);
                 setActiveIndex(i);
               }}
-              className={i === activeIndex ? "text-red-800 font-bold m-2 underline underline-offset-1" : "m-2"}
+              className={i === activeIndex ? "text-red-800 font-bold p-1 m-1 underline underline-offset-4" : "p-1 m-1"}
               key={alphabet}
             >
               {alphabet}

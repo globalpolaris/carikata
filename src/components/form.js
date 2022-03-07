@@ -1,6 +1,30 @@
 import React from "react";
 
 export default function Form() {
+  const [kata, setKata] = React.useState("");
+  const [starts, setStarts] = React.useState("");
+  const [ends, setEnds] = React.useState("");
+  const [contains, setContains] = React.useState("");
+
+  const updateField = (event) => {
+    const re = /^[A-Za-z?]+$/;
+    if (re.test(event.target.value) || event.target.value === "")
+      setKata(event.target.value);
+  };
+
+  const onChange = (event) => {
+    const re = /^[A-Za-z]+$/;
+    if (re.test(event.target.value) || event.target.value === "") {
+      if (event.target.name === "starts") setStarts(event.target.value);
+      if (event.target.name === "ends") setEnds(event.target.value);
+      if (event.target.name === "contains") setContains(event.target.value);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log(kata, starts, ends, contains);
+  };
+
   return (
     <div>
       <div className="flex flex-col">
@@ -8,10 +32,12 @@ export default function Form() {
           Kata
         </label>
         <input
-          id="kata"
+          name="kata"
           type="text"
           className="rounded-md p-2 border-slate-400 border outline-none focus:border-slate-600"
           placeholder="R?M?H"
+          value={kata}
+          onChange={(event) => updateField(event)}
         ></input>
       </div>
       <div className="flex flex-col lg:flex-row lg:place-content-evenly my-5">
@@ -20,10 +46,12 @@ export default function Form() {
             Starts With
           </label>
           <input
-            id="starts"
+            name="starts"
             type="text"
             className="rounded-md p-2 border-slate-400 border outline-none focus:border-slate-600"
             placeholder="R"
+            value={starts}
+            onChange={(event) => onChange(event)}
           ></input>
         </div>
         <div className="flex flex-col">
@@ -31,10 +59,12 @@ export default function Form() {
             Ends With
           </label>
           <input
-            id="ends"
+            name="ends"
             type="text"
             className="rounded-md p-2 border-slate-400 border outline-none focus:border-slate-600"
             placeholder="H"
+            value={ends}
+            onChange={(event) => onChange(event)}
           ></input>
         </div>
         <div className="flex flex-col">
@@ -42,14 +72,21 @@ export default function Form() {
             Contains
           </label>
           <input
-            id="contains"
+            name="contains"
             type="text"
             className="rounded-md p-2 border-slate-400 border outline-none focus:border-slate-600"
             placeholder="UMA"
+            value={contains}
+            onChange={(event) => onChange(event)}
           ></input>
         </div>
       </div>
-      <button className="text-white min-w-full bg-red-500 p-2 rounded-md hover:bg-red-600 my-3">Cari</button>
+      <button
+        onClick={handleSubmit}
+        className="text-white min-w-full bg-red-500 p-2 rounded-md hover:bg-red-600 my-3"
+      >
+        Cari
+      </button>
     </div>
   );
 }
