@@ -2,7 +2,7 @@ import React from "react";
 
 const obj = require("../word.json");
 
-export default function Words() {
+export default function AllWords() {
   const [wordList, setWordList] = React.useState(obj.words);
   const [activeIndex, setActiveIndex] = React.useState(-1);
   const alphabet = [

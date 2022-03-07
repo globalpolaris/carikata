@@ -1,5 +1,5 @@
 import FormKata from "../components/FormKata";
-import Words from "../components/Words";
+import AllWords from "../components/AllWords";
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       <h1 className="text-2xl font-bold text-center">Carikatla</h1>
       <div className="w-8/12 xl:w-6/12">
         <FormKata />
-        <Words />
+        <AllWords />
       </div>
     </div>
   );

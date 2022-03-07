@@ -6,7 +6,6 @@ export default function MiniForm(props) {
 
   const [kata, setKata] = React.useState(data.kata);
   const [starts, setStarts] = React.useState(data.starts);
-  const [submitted, setSubmitted] = React.useState(true);
   const [ends, setEnds] = React.useState(data.ends);
   const [contains, setContains] = React.useState(data.contains);
 
