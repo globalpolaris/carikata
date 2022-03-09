@@ -17,6 +17,7 @@ pipeline {
         nodejs(nodeJSInstallationName: 'Node 16') {
           sh """
             echo "*** building ***"
+            ls
             npm install
             npm run build
           """
