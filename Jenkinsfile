@@ -14,11 +14,13 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        sh """
-          echo "*** building ***"
-          npm install
-          npm run build
-        """
+        nodejs() {
+          sh """
+            echo "*** building ***"
+            npm install
+            npm run build
+          """
+        }
       }
     }
     stage('push image') {
