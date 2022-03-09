@@ -18,7 +18,7 @@ pipeline {
           sh """
             echo "*** building ***"
             ls
-            npm install
+            npm install --supress-warnings
             npm run build
           """
         }
