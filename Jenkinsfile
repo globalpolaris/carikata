@@ -40,7 +40,6 @@ pipeline {
           echo "*** deploying ***"
           kubectl config set-context ${CLUSTER_CONTEXT} --cluster=kubernetes --user=${CLUSTER_USER}
           kubectl config use-context ${CLUSTER_CONTEXT}
-          kubectl get nodes
           helm upgrade -i carikatla helm/carikatla -f helm/carikatla/values.yaml -n carikatla --set=image.tag=${IMAGE_TAG}
           kubectl rollout status deployment/carikatla -n carikatla
           kubectl get pods -n carikatla
