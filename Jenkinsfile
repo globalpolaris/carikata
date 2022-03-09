@@ -1,4 +1,5 @@
 pipeline {
+  agent any
 
   environment {
     Version_Major = 1
