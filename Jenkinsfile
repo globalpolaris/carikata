@@ -14,7 +14,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        nodejs() {
+        nodejs(nodeJSInstallationName: 'Node 16') {
           sh """
             echo "*** building ***"
             npm install
