@@ -9,6 +9,7 @@ pipeline {
     IMAGE_TAG = "${Version_Major}.${Version_Minor}.${Version_Patch}-${BUILD_TIMESTAMP}-${env.BUILD_NUMBER}"
     CLUSTER_CONTEXT = credentials('cluster-context')
     CLUSTER_USER = credentials('cluster-user')
+    CI = false
   }
 
   stages {
@@ -17,8 +18,8 @@ pipeline {
         nodejs(nodeJSInstallationName: 'Node 16') {
           sh """
             echo "*** building ***"
-            ls
-            npm install --supress-warnings
+            CI=${CI}
+            npm install
             npm run build
           """
         }
