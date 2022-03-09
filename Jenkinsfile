@@ -13,7 +13,7 @@ pipeline {
   }
 
   stages {
-    stage('build') {
+    stage('Build') {
       steps {
         nodejs(nodeJSInstallationName: 'Node 16') {
           sh """
@@ -25,7 +25,7 @@ pipeline {
         }
       }
     }
-    stage('push image') {
+    stage('Push Image') {
       steps {
         sh """
           echo "*** pushing image ***"
@@ -34,7 +34,7 @@ pipeline {
         """
       }
     }
-    stage('helm') {
+    stage('Helm') {
       steps {
         sh """
           echo "*** deploying ***"
