@@ -9,7 +9,8 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
-      protocol: TCP
+      #protocol: TCP
+      nodePort: {{ .Values.service.nodePort }}
       name: http
   selector:
     {{- include "carikatla.selectorLabels" . | nindent 4 }}
