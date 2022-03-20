@@ -7,7 +7,6 @@ pipeline {
   agent {
     kubernetes {
       defaultContainer 'jnlp'
-      inheritFrom 'jenkins-slave'
       yaml """
       apiVersion: v1
       kind: Pod
@@ -22,7 +21,7 @@ pipeline {
           command:
           - cat
           tty: true
-"""
+      """
     }
   }
 
