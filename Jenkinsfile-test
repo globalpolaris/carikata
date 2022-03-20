@@ -1,0 +1,29 @@
+pipeline {
+  agent {
+    kubernetes {
+      defaultContainer 'jnlp'
+      containers: [
+        containerTemplate(name: 'node', image: 'node:lts-alpine', command: 'cat', tty: true),
+      ]
+    }
+  }
+
+  environment {
+    CI = false
+  }
+
+  stages {
+    stage('Build') {
+      steps {
+        container('node') {
+          sh """
+            echo "*** building ***"
+            CI=${CI}
+            npm install
+            npm run build
+          """
+        }
+      }
+    }
+  }
+}
