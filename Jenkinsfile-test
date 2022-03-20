@@ -1,15 +1,29 @@
 pipeline {
-  agent {
-    kubernetes {
-      defaultContainer 'jnlp'
-      containers: [
-        containerTemplate(name: 'node', image: 'node:lts-alpine', command: 'cat', tty: true),
-      ]
-    }
-  }
 
   environment {
     CI = false
+  }
+
+  agent {
+    kubernetes {
+      defaultContainer 'jnlp'
+      inheritFrom 'jenkins-slave'
+      yaml """
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        labels:
+          component: ci
+      spec:
+        containers:
+        - name: node
+          image: node:lts-alpine
+          imagePullPolicy: IfNotPresent
+          command:
+          - cat
+          tty: true
+"""
+    }
   }
 
   stages {
