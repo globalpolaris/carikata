@@ -5,10 +5,13 @@ pipeline {
     Version_Major = 1
     Version_Minor = 0
     Version_Patch = 0
-    IMAGE_NAME = "10.52.51.109:5000/carikatla"
+    IMAGE_NAME = "index.docker.io/cocatrip/carikatla"
     IMAGE_TAG = "${Version_Major}.${Version_Minor}.${Version_Patch}-${BUILD_TIMESTAMP}-${env.BUILD_NUMBER}"
     CLUSTER_CONTEXT = credentials('cluster-context')
     CLUSTER_USER = credentials('cluster-user')
+    REGISTRY = "index.docker.io"
+    REGISTRY_USER = credentials('registry-user')
+    REGISTRY_PASSWORD = credentials('registry-password')
   }
 
   agent {
@@ -28,8 +31,8 @@ pipeline {
           command:
           - cat
           tty: true
-        - name: docker
-          image: docker:20.10.13-alpine3.15
+        - name: kaniko
+          image: gcr.io/kaniko-project/executor:debug
           imagePullPolicy: IfNotPresent
           command:
           - cat
@@ -60,9 +63,11 @@ pipeline {
 
     stage('Push Image') {
       steps {
-        container('docker') {
+        container('kaniko') {
           sh """
             echo "*** pushing image ***"
+            mkdir -p /kaniko/.docker
+            echo "{\"auths\":{\"${REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${REGISTRY_USER}" "${REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
             docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
             docker push ${IMAGE_NAME}:${IMAGE_TAG}
           """
