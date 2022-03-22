@@ -1,0 +1,109 @@
+pipeline {
+
+  environment {
+    CI = false
+    Version_Major = 1
+    Version_Minor = 0
+    Version_Patch = 0
+    IMAGE_NAME = "index.docker.io/cocatrip/carikatla"
+    IMAGE_TAG = "${Version_Major}.${Version_Minor}.${Version_Patch}-${BUILD_TIMESTAMP}-${env.BUILD_NUMBER}"
+    CLUSTER_CONTEXT = credentials('cluster-context')
+    CLUSTER_USER = credentials('cluster-user')
+    REGISTRY_URL = "https://index.docker.io/v1/"
+    REGISTRY_AUTH = credentials('registry-auth')
+  }
+
+  agent {
+    kubernetes {
+      defaultContainer 'jnlp'
+      yaml """
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        labels:
+          component: ci
+      spec:
+        containers:
+        - name: node
+          image: node:lts-alpine
+          imagePullPolicy: IfNotPresent
+          command: ["cat"]
+          tty: true
+        - name: kaniko
+          image: gcr.io/kaniko-project/executor:debug
+          imagePullPolicy: IfNotPresent
+          command: ["cat"]
+          tty: true
+        - name: helm
+          image: dtzar/helm-kubectl
+          imagePullPolicy: IfNotPresent
+          command: ["cat"]
+          tty: true
+          volumeMounts:
+          - name: kubeconfig
+            mountPath: /root/.kube
+        volumes:
+        - name: kubeconfig
+          hostPath:
+            path: /home/admin/.kube
+            type: Directory
+      """
+    }
+  }
+
+  stages {
+    stage('Build') {
+      steps {
+        container('node') {
+          sh """
+            echo "*** building ***"
+            CI=${CI}
+            npm install
+            npm run build
+          """
+        }
+      }
+    }
+
+    stage('Push Image') {
+      steps {
+        container('kaniko') {
+          sh """
+            echo "*** pushing image ***"
+            mkdir -p /kaniko/.docker
+
+            echo '{
+              "auths": {
+                \"${REGISTRY_URL}\": {
+                  "auth":\"${REGISTRY_AUTH}\"
+                }
+              }
+            }' > /kaniko/.docker/config.json
+
+            /kaniko/executor \
+              --context `pwd` \
+              --dockerfile `pwd`/Dockerfile \
+              --destination ${IMAGE_NAME}:${IMAGE_TAG}
+          """
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        container('helm') {
+          sh """
+            echo "*** deploying ***"
+            kubectl config set-context ${CLUSTER_CONTEXT} --cluster=kubernetes --user=${CLUSTER_USER}
+            kubectl config use-context ${CLUSTER_CONTEXT}
+            helm upgrade -i carikatla helm/carikatla -f helm/carikatla/values.yaml -n carikatla --set=image.tag=${IMAGE_TAG} --create-namespace
+            kubectl rollout status deployment/carikatla -n carikatla
+            kubectl get pods -n carikatla
+            helm ls -n carikatla
+          """
+        }
+      }
+    }
+
+  }
+}
