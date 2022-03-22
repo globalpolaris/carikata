@@ -40,12 +40,10 @@ pipeline {
             tty: true
             volumeMounts:
               - name: kubeconfig
-                mountPath: '/root/.kube/config'
-                subPath: config
+                mountPath: /root/.kube
         volumes:
           - name: kubeconfig
-            hostPath: '/home/admin/.kube/config'
-            subPath: config
+            hostPath: /home/admin/.kube
       """
     }
   }
