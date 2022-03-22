@@ -44,8 +44,8 @@ pipeline {
                 subPath: config
         volumes:
           - name: kubeconfig
-            hostPath: /etc/rancher/k3s/k3s.yaml
-            subPath: k3s.yaml
+            hostPath: /home/admin/.kube/config
+            subPath: config
       """
     }
   }
