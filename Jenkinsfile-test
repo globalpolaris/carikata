@@ -23,6 +23,7 @@ pipeline {
         labels:
           component: ci
       spec:
+        serviceAccountName: jenkins
         containers:
         - name: node
           image: node:lts-alpine
