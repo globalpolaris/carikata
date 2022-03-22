@@ -9,6 +9,7 @@ pipeline {
     IMAGE_TAG = "${Version_Major}.${Version_Minor}.${Version_Patch}-${BUILD_TIMESTAMP}-${env.BUILD_NUMBER}"
     CLUSTER_CONTEXT = credentials('cluster-context')
     CLUSTER_USER = credentials('cluster-user')
+    REGISTRY_URL = "https://index.docker.io/v1/"
     REGISTRY_AUTH = credentials('registry-auth')
   }
 
@@ -40,10 +41,10 @@ pipeline {
             tty: true
             volumeMounts:
               - name: kubeconfig
-                mountPath: /root/.kube
+                mountPath: /root/kube
         volumes:
           - name: kubeconfig
-            hostPath: /home/admin/.kube
+            hostPath: /home/admin/kube
       """
     }
   }
@@ -71,7 +72,7 @@ pipeline {
 
             echo '{
               "auths": {
-                "https://index.docker.io/v1/": {
+                \"${REGISTRY_URL}\": {
                   "auth":\"${REGISTRY_AUTH}\"
                 }
               }
