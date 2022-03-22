@@ -24,27 +24,29 @@ pipeline {
           component: ci
       spec:
         containers:
-          - name: node
-            image: node:lts-alpine
-            imagePullPolicy: IfNotPresent
-            command: ["cat"]
-            tty: true
-          - name: kaniko
-            image: gcr.io/kaniko-project/executor:debug
-            imagePullPolicy: IfNotPresent
-            command: ["cat"]
-            tty: true
-          - name: helm
-            image: dtzar/helm-kubectl
-            imagePullPolicy: IfNotPresent
-            command: ["cat"]
-            tty: true
-            volumeMounts:
-              - name: kubeconfig
-                mountPath: /root/kube
-        volumes:
+        - name: node
+          image: node:lts-alpine
+          imagePullPolicy: IfNotPresent
+          command: ["cat"]
+          tty: true
+        - name: kaniko
+          image: gcr.io/kaniko-project/executor:debug
+          imagePullPolicy: IfNotPresent
+          command: ["cat"]
+          tty: true
+        - name: helm
+          image: dtzar/helm-kubectl
+          imagePullPolicy: IfNotPresent
+          command: ["cat"]
+          tty: true
+          volumeMounts:
           - name: kubeconfig
-            hostPath: /home/admin/kube
+            mountPath: /root/.kube
+        volumes:
+        - name: kubeconfig
+          hostPath:
+            path: /home/admin/.kube
+            type: Directory
       """
     }
   }
