@@ -67,7 +67,15 @@ pipeline {
           sh """
             echo "*** pushing image ***"
             mkdir -p /kaniko/.docker
-            echo "{\"auths\":{\"index.docker.io\":{\"auth\":\"$(printf "%s:%s" "${REGISTRY_USER}" "${REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+
+            echo '{
+              "auths": {
+                "https://index.docker.io/v1/": {
+                  "auth":"$(printf "%s:%s" "${REGISTRY_USER}" "${REGISTRY_PASSWORD}" | base64 | tr -d '\n')"
+                }
+              }
+            }' > /kaniko/.docker/config.json
+
             /kaniko/executor \
               --context `pwd` \
               --dockerfile `pwd`/Dockerfile \
