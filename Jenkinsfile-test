@@ -41,9 +41,11 @@ pipeline {
             volumeMounts:
               - name: kubeconfig
                 mountPath: /root/.kube/config
+                subPath: config
         volumes:
           - name: kubeconfig
-            hostPath: /home/admin/.kube/config
+            hostPath: /etc/rancher/k3s/k3s.yaml
+            subPath: k3s.yaml
       """
     }
   }
