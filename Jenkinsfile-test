@@ -43,7 +43,7 @@ pipeline {
                 mountPath: /root/.kube/config
         volumes:
           - name: kubeconfig
-            hostPath: ~/.kube/config
+            hostPath: /home/admin/.kube/config
       """
     }
   }
