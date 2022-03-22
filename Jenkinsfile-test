@@ -21,6 +21,18 @@ pipeline {
           command:
           - cat
           tty: true
+        - name: docker
+          image: docker:20.10.13-alpine3.15
+          imagePullPolicy: IfNotPresent
+          command:
+          - cat
+          tty: true
+        - name: helm
+          image: trainingad1/helm3
+          imagePullPolicy: IfNotPresent
+          command:
+          - cat
+          tty: true
       """
     }
   }
@@ -38,5 +50,34 @@ pipeline {
         }
       }
     }
+
+    stage('Push Image') {
+      steps {
+        container('docker') {
+          sh """
+            echo "*** pushing image ***"
+            docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+            docker push ${IMAGE_NAME}:${IMAGE_TAG}
+          """
+        }
+      }
+    }
+
+    stage('Helm') {
+      steps {
+        container('helm') {
+          sh """
+            echo "*** deploying ***"
+            kubectl config set-context ${CLUSTER_CONTEXT} --cluster=kubernetes --user=${CLUSTER_USER}
+            kubectl config use-context ${CLUSTER_CONTEXT}
+            helm upgrade -i carikatla helm/carikatla -f helm/carikatla/values.yaml -n carikatla --set=image.tag=${IMAGE_TAG} --create-namespace
+            kubectl rollout status deployment/carikatla -n carikatla
+            kubectl get pods -n carikatla
+            helm ls -n carikatla
+          """
+        }
+      }
+    }
+
   }
 }

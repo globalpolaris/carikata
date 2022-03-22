@@ -1,5 +1,23 @@
 pipeline {
-  agent any
+  agent {
+    kubernetes {
+      defaultContainer 'jnlp'
+      yaml '''
+      apiVersion: v1
+      kind: Pod
+      metadata:
+      spec:
+        containers:
+        - name: node
+          image: node:lts-alpine
+          imagePullPolicy: IfNotPresent
+          command:
+          - cat
+          tty: true
+        - name: 
+      '''
+    }
+  }
 
   environment {
     Version_Major = 1
@@ -15,7 +33,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        nodejs(nodeJSInstallationName: 'Node 16') {
+        container('node') {
           sh """
             echo "*** building ***"
             CI=${CI}
@@ -27,11 +45,13 @@ pipeline {
     }
     stage('Push Image') {
       steps {
-        sh """
-          echo "*** pushing image ***"
-          docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-          docker push ${IMAGE_NAME}:${IMAGE_TAG}
-        """
+        container('docker') {
+          sh """
+            echo "*** pushing image ***"
+            docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+            docker push ${IMAGE_NAME}:${IMAGE_TAG}
+          """
+        }
       }
     }
     stage('Helm') {
