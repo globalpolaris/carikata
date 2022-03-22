@@ -26,17 +26,17 @@ pipeline {
           - name: node
             image: node:lts-alpine
             imagePullPolicy: IfNotPresent
-            command: cat
+            command: ["cat"]
             tty: true
           - name: kaniko
             image: gcr.io/kaniko-project/executor:debug
             imagePullPolicy: IfNotPresent
-            command: cat
+            command: ["cat"]
             tty: true
           - name: helm
             image: dtzar/helm-kubectl
             imagePullPolicy: IfNotPresent
-            command: cat
+            command: ["cat"]
             tty: true
             volumeMounts:
               - name: kubeconfig
@@ -86,7 +86,7 @@ pipeline {
       }
     }
 
-    stage('Helm') {
+    stage('Deploy') {
       steps {
         container('helm') {
           sh """
