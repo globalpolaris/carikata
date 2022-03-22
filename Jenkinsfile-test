@@ -2,6 +2,13 @@ pipeline {
 
   environment {
     CI = false
+    Version_Major = 1
+    Version_Minor = 0
+    Version_Patch = 0
+    IMAGE_NAME = "10.52.51.109:5000/carikatla"
+    IMAGE_TAG = "${Version_Major}.${Version_Minor}.${Version_Patch}-${BUILD_TIMESTAMP}-${env.BUILD_NUMBER}"
+    CLUSTER_CONTEXT = credentials('cluster-context')
+    CLUSTER_USER = credentials('cluster-user')
   }
 
   agent {
